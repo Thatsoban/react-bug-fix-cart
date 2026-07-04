@@ -1,0 +1,15 @@
+// This is the buggy version, kept here just for reference/comparison.
+// The bug: mutating the cartItems array directly with push(), then
+// calling setCartItems with that same array reference.
+// React compares state by reference — same reference means no re-render,
+// so the cart badge and total look frozen even though items were added.
+
+function handleAddToCart(product) {
+  cartItems.push(product);       // mutates existing array — BAD
+  setCartItems(cartItems);       // same reference, React skips re-render
+}
+
+// THE FIX (used in App.jsx):
+// function handleAddToCart(product) {
+//   setCartItems((prev) => [...prev, product]); // new array, triggers re-render
+// }
